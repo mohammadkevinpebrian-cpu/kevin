@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShoeStore - Toko Sepatu</title>
+
+    <title>ShoeStore - Supabase</title>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -22,14 +26,16 @@
             color: #222;
         }
 
-        /* NAVBAR */
+        /* =========================
+           NAVBAR
+        ========================= */
+
         nav {
-            width: 100%;
             background: white;
+            padding: 18px 8%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 8%;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
@@ -48,24 +54,27 @@
 
         .menu {
             display: flex;
-            gap: 30px;
+            gap: 25px;
             list-style: none;
         }
 
         .menu a {
             text-decoration: none;
             color: #333;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         .menu a:hover {
             color: #198754;
         }
 
-        /* HERO */
+        /* =========================
+           HERO
+        ========================= */
+
         .hero {
-            min-height: 500px;
             padding: 70px 8%;
+            min-height: 430px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -74,12 +83,12 @@
         }
 
         .hero-text {
-            max-width: 550px;
+            max-width: 600px;
         }
 
         .hero-text h1 {
-            font-size: 50px;
-            line-height: 1.15;
+            font-size: 48px;
+            line-height: 1.2;
             margin-bottom: 20px;
         }
 
@@ -91,43 +100,48 @@
             color: #666;
             font-size: 18px;
             line-height: 1.7;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+        }
+
+        .hero-icon {
+            width: 350px;
+            height: 250px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         .btn {
-            display: inline-block;
-            padding: 14px 25px;
+            border: none;
             background: #198754;
             color: white;
-            text-decoration: none;
+            padding: 13px 22px;
             border-radius: 8px;
+            cursor: pointer;
             font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn:hover {
             background: #146c43;
         }
 
-        .hero-shoe {
-            width: 400px;
-            height: 300px;
-            background: white;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 130px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-        }
+        /* =========================
+           SECTION
+        ========================= */
 
-        /* SECTION */
         section {
-            padding: 70px 8%;
+            padding: 65px 8%;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .section-title h2 {
@@ -139,7 +153,36 @@
             color: #777;
         }
 
-        /* PRODUCTS */
+        /* =========================
+           SEARCH + ADD
+        ========================= */
+
+        .tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search {
+            flex: 1;
+            max-width: 400px;
+            padding: 13px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+        }
+
+        .search:focus {
+            border-color: #198754;
+        }
+
+        /* =========================
+           PRODUCT
+        ========================= */
+
         .products {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -155,70 +198,217 @@
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
         }
 
         .product-image {
-            height: 190px;
+            width: 100%;
+            height: 200px;
             background: #eef1f3;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 80px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image {
+            font-size: 75px;
         }
 
         .card-content {
-            padding: 20px;
+            padding: 18px;
+        }
+
+        .category {
+            color: #198754;
+            font-size: 14px;
+            margin-bottom: 8px;
         }
 
         .card-content h3 {
             margin-bottom: 8px;
         }
 
-        .category {
-            color: #198754;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
         .price {
             font-size: 20px;
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stock {
+            color: #777;
+            font-size: 14px;
             margin-bottom: 15px;
         }
 
-        .buy-btn {
-            width: 100%;
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
             border: none;
-            padding: 11px;
-            background: #198754;
+            padding: 10px;
+            border-radius: 7px;
             color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #f0ad4e;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+        }
+
+        .edit-btn:hover {
+            background: #d89425;
+        }
+
+        .delete-btn:hover {
+            background: #bb2d3b;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            color: #777;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-size: 25px;
+        }
+
+        .close {
+            font-size: 28px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #198754;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            border: none;
+            background: #6c757d;
+            color: white;
+            padding: 12px;
             border-radius: 7px;
             cursor: pointer;
             font-weight: bold;
         }
 
-        .buy-btn:hover {
-            background: #146c43;
+        .save-btn {
+            flex: 1;
+            border: none;
+            background: #198754;
+            color: white;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        /* ABOUT */
+        /* =========================
+           ABOUT
+        ========================= */
+
         .about {
+            background: white;
             display: flex;
             align-items: center;
             gap: 50px;
-            background: white;
         }
 
-        .about-image {
+        .about-icon {
             flex: 1;
-            min-height: 300px;
+            min-height: 280px;
             background: #e8f5ee;
             border-radius: 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             font-size: 100px;
         }
 
@@ -227,8 +417,8 @@
         }
 
         .about-text h2 {
-            font-size: 34px;
-            margin-bottom: 20px;
+            font-size: 32px;
+            margin-bottom: 18px;
         }
 
         .about-text p {
@@ -237,12 +427,15 @@
             margin-bottom: 15px;
         }
 
-        /* CONTACT */
+        /* =========================
+           CONTACT
+        ========================= */
+
         .contact-box {
-            max-width: 700px;
+            max-width: 650px;
             margin: auto;
             background: white;
-            padding: 35px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.07);
         }
@@ -262,12 +455,10 @@
             resize: none;
         }
 
-        .contact-box button {
-            border: none;
-            cursor: pointer;
-        }
+        /* =========================
+           FOOTER
+        ========================= */
 
-        /* FOOTER */
         footer {
             background: #1f2933;
             color: white;
@@ -280,8 +471,11 @@
             margin-top: 8px;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
             .products {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -291,7 +485,7 @@
                 text-align: center;
             }
 
-            .hero-shoe {
+            .hero-icon {
                 width: 100%;
             }
 
@@ -301,16 +495,17 @@
         }
 
         @media (max-width: 600px) {
+
             nav {
                 padding: 15px 5%;
             }
 
             .menu {
-                gap: 12px;
+                gap: 10px;
             }
 
             .menu a {
-                font-size: 13px;
+                font-size: 12px;
             }
 
             .hero {
@@ -318,7 +513,7 @@
             }
 
             .hero-text h1 {
-                font-size: 36px;
+                font-size: 35px;
             }
 
             section {
@@ -329,9 +524,13 @@
                 grid-template-columns: 1fr;
             }
 
-            .hero-shoe {
-                height: 220px;
-                font-size: 90px;
+            .tools {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search {
+                max-width: none;
             }
         }
     </style>
@@ -339,212 +538,186 @@
 
 <body>
 
-    <!-- NAVBAR -->
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
     <nav>
+
         <div class="logo">
             👟 Shoe<span>Store</span>
         </div>
 
         <ul class="menu">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#produk">Produk</a></li>
-            <li><a href="#tentang">Tentang</a></li>
-            <li><a href="#kontak">Kontak</a></li>
+            <li>
+                <a href="#home">Home</a>
+            </li>
+
+            <li>
+                <a href="#produk">Produk</a>
+            </li>
+
+            <li>
+                <a href="#tentang">Tentang</a>
+            </li>
+
+            <li>
+                <a href="#kontak">Kontak</a>
+            </li>
         </ul>
+
     </nav>
 
 
-    <!-- HERO -->
+    <!-- =========================
+         HERO
+    ========================= -->
+
     <section class="hero" id="home">
 
         <div class="hero-text">
+
             <h1>
                 Temukan Sepatu
                 <span>Favoritmu</span>
             </h1>
 
             <p>
-                Koleksi sepatu berkualitas dengan desain modern,
-                nyaman digunakan, dan cocok untuk berbagai aktivitas.
+                Temukan berbagai pilihan sepatu berkualitas
+                dengan desain modern dan harga terjangkau.
             </p>
 
             <a href="#produk" class="btn">
                 Lihat Produk
             </a>
+
         </div>
 
-        <div class="hero-shoe">
+        <div class="hero-icon">
             👟
         </div>
 
     </section>
 
 
-    <!-- PRODUK -->
+    <!-- =========================
+         PRODUK
+    ========================= -->
+
     <section id="produk">
 
         <div class="section-title">
-            <h2>Produk Terbaru</h2>
-            <p>Pilih sepatu yang sesuai dengan gaya kamu</p>
+
+            <h2>Daftar Produk</h2>
+
+            <p>
+                Data produk tersimpan di Supabase
+            </p>
+
         </div>
 
-        <div class="products">
 
-            <!-- PRODUK 1 -->
-            <div class="card">
-                <div class="product-image">
-                    👟
-                </div>
+        <div class="tools">
 
-                <div class="card-content">
-                    <div class="category">
-                        Sneakers
-                    </div>
+            <input
+                type="text"
+                id="searchInput"
+                class="search"
+                placeholder="🔍 Cari produk..."
+                oninput="cariProduk()"
+            >
 
-                    <h3>Urban Sneakers</h3>
+            <button
+                class="btn"
+                onclick="bukaTambah()">
+                + Tambah Produk
+            </button>
 
-                    <div class="price">
-                        Rp 350.000
-                    </div>
-
-                    <button class="buy-btn"
-                        onclick="beli('Urban Sneakers')">
-                        Beli Sekarang
-                    </button>
-                </div>
-            </div>
+        </div>
 
 
-            <!-- PRODUK 2 -->
-            <div class="card">
-                <div class="product-image">
-                    👞
-                </div>
-
-                <div class="card-content">
-                    <div class="category">
-                        Formal
-                    </div>
-
-                    <h3>Classic Shoes</h3>
-
-                    <div class="price">
-                        Rp 450.000
-                    </div>
-
-                    <button class="buy-btn"
-                        onclick="beli('Classic Shoes')">
-                        Beli Sekarang
-                    </button>
-                </div>
-            </div>
+        <div id="loading" class="loading">
+            Memuat produk...
+        </div>
 
 
-            <!-- PRODUK 3 -->
-            <div class="card">
-                <div class="product-image">
-                    🥾
-                </div>
-
-                <div class="card-content">
-                    <div class="category">
-                        Outdoor
-                    </div>
-
-                    <h3>Mountain Boots</h3>
-
-                    <div class="price">
-                        Rp 550.000
-                    </div>
-
-                    <button class="buy-btn"
-                        onclick="beli('Mountain Boots')">
-                        Beli Sekarang
-                    </button>
-                </div>
-            </div>
-
-
-            <!-- PRODUK 4 -->
-            <div class="card">
-                <div class="product-image">
-                    👟
-                </div>
-
-                <div class="card-content">
-                    <div class="category">
-                        Running
-                    </div>
-
-                    <h3>Sport Runner</h3>
-
-                    <div class="price">
-                        Rp 400.000
-                    </div>
-
-                    <button class="buy-btn"
-                        onclick="beli('Sport Runner')">
-                        Beli Sekarang
-                    </button>
-                </div>
-            </div>
-
+        <div
+            id="products"
+            class="products">
         </div>
 
     </section>
 
 
-    <!-- TENTANG -->
+    <!-- =========================
+         TENTANG
+    ========================= -->
+
     <section class="about" id="tentang">
 
-        <div class="about-image">
+        <div class="about-icon">
             👟
         </div>
 
         <div class="about-text">
 
-            <h2>Tentang ShoeStore</h2>
+            <h2>
+                Tentang ShoeStore
+            </h2>
 
             <p>
-                ShoeStore adalah toko sepatu yang menyediakan
-                berbagai pilihan sepatu untuk kebutuhan sehari-hari,
-                olahraga, maupun acara formal.
+                ShoeStore adalah toko sepatu sederhana
+                yang menyediakan berbagai jenis sepatu
+                untuk kebutuhan sehari-hari.
             </p>
 
             <p>
-                Kami mengutamakan kualitas produk, kenyamanan,
-                dan harga yang terjangkau bagi pelanggan.
+                Website ini menggunakan Supabase sebagai
+                database untuk menyimpan data produk.
             </p>
-
-            <a href="#kontak" class="btn">
-                Hubungi Kami
-            </a>
 
         </div>
 
     </section>
 
 
-    <!-- KONTAK -->
+    <!-- =========================
+         KONTAK
+    ========================= -->
+
     <section id="kontak">
 
         <div class="section-title">
-            <h2>Hubungi Kami</h2>
-            <p>Silakan kirim pesan kepada kami</p>
+
+            <h2>
+                Hubungi Kami
+            </h2>
+
+            <p>
+                Silakan kirim pesan kepada kami
+            </p>
+
         </div>
+
 
         <div class="contact-box">
 
             <input
                 type="text"
-                placeholder="Nama">
+                id="namaKontak"
+                placeholder="Nama"
+            >
 
             <input
                 type="email"
-                placeholder="Email">
+                id="emailKontak"
+                placeholder="Email"
+            >
 
             <textarea
-                placeholder="Pesan"></textarea>
+                id="pesanKontak"
+                placeholder="Pesan">
+            </textarea>
 
             <button
                 class="btn"
@@ -557,36 +730,891 @@
     </section>
 
 
-    <!-- FOOTER -->
+    <!-- =========================
+         MODAL TAMBAH / EDIT
+    ========================= -->
+
+    <div
+        id="modal"
+        class="modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    Tambah Produk
+                </h2>
+
+                <span
+                    class="close"
+                    onclick="tutupModal()">
+                    &times;
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Nama Produk
+                </label>
+
+                <input
+                    type="text"
+                    id="nama"
+                    placeholder="Contoh: Nike Air Max"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Kategori
+                </label>
+
+                <input
+                    type="text"
+                    id="kategori"
+                    placeholder="Contoh: Sneakers"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Harga
+                </label>
+
+                <input
+                    type="number"
+                    id="harga"
+                    placeholder="Contoh: 350000"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Stok
+                </label>
+
+                <input
+                    type="number"
+                    id="stok"
+                    placeholder="Contoh: 10"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    URL Gambar
+                </label>
+
+                <input
+                    type="text"
+                    id="gambar"
+                    placeholder="https://..."
+                >
+
+            </div>
+
+
+            <div class="form-buttons">
+
+                <button
+                    class="cancel-btn"
+                    onclick="tutupModal()">
+                    Batal
+                </button>
+
+                <button
+                    class="save-btn"
+                    onclick="simpanProduk()">
+                    Simpan
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
     <footer>
 
-        <h3>👟 ShoeStore</h3>
+        <h3>
+            👟 ShoeStore
+        </h3>
 
         <p>
             Toko Sepatu Modern & Berkualitas
         </p>
 
         <p>
-            © 2026 ShoeStore. All Rights Reserved.
+            © 2026 ShoeStore
         </p>
 
     </footer>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- =========================
+         JAVASCRIPT SUPABASE
+    ========================= -->
+
     <script>
 
-        function beli(namaProduk) {
-            alert(
-                "Kamu memilih produk: " + namaProduk
+        // =====================================
+        // KONFIGURASI SUPABASE
+        // =====================================
+
+        const SUPABASE_URL =
+            "https://gviwzvtuzpvcsiicagmh.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable__RbWglJwDSNeTkvvMA8L1A_ZJlottya";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
             );
+
+
+        // =====================================
+        // VARIABLE
+        // =====================================
+
+        let semuaProduk = [];
+
+        let editId = null;
+
+
+        // =====================================
+        // SAAT HALAMAN DIBUKA
+        // =====================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function() {
+
+                ambilProduk();
+
+            }
+        );
+
+
+        // =====================================
+        // AMBIL DATA PRODUK
+        // =====================================
+
+        async function ambilProduk() {
+
+            const loading =
+                document.getElementById("loading");
+
+            loading.style.display = "block";
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+                    .from("produk")
+                    .select("*")
+                    .order("id", {
+                        ascending: false
+                    });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                semuaProduk = data || [];
+
+                tampilkanProduk(
+                    semuaProduk
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "products"
+                ).innerHTML = `
+                    <div class="empty">
+                        <h3>Gagal mengambil data</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+
+            }
+
+
+            loading.style.display = "none";
+
         }
 
+
+        // =====================================
+        // TAMPILKAN PRODUK
+        // =====================================
+
+        function tampilkanProduk(
+            produk
+        ) {
+
+            const container =
+                document.getElementById(
+                    "products"
+                );
+
+
+            if (
+                !produk ||
+                produk.length === 0
+            ) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        <h3>Belum ada produk</h3>
+                        <p>Silakan tambahkan produk baru.</p>
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                produk.map(function(item) {
+
+                    let gambar = "";
+
+                    if (item.gambar) {
+
+                        gambar = `
+                            <img
+                                src="${item.gambar}"
+                                alt="${item.nama}"
+                                onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=&quot;no-image&quot;>👟</div>';"
+                            >
+                        `;
+
+                    } else {
+
+                        gambar = `
+                            <div class="no-image">
+                                👟
+                            </div>
+                        `;
+
+                    }
+
+
+                    return `
+
+                        <div class="card">
+
+                            <div class="product-image">
+                                ${gambar}
+                            </div>
+
+                            <div class="card-content">
+
+                                <div class="category">
+                                    ${item.kategori}
+                                </div>
+
+                                <h3>
+                                    ${item.nama}
+                                </h3>
+
+                                <div class="price">
+                                    ${formatRupiah(item.harga)}
+                                </div>
+
+                                <div class="stock">
+                                    Stok: ${item.stok}
+                                </div>
+
+                                <div class="actions">
+
+                                    <button
+                                        class="edit-btn"
+                                        onclick="bukaEdit(${item.id})">
+                                        Edit
+                                    </button>
+
+                                    <button
+                                        class="delete-btn"
+                                        onclick="hapusProduk(${item.id})">
+                                        Hapus
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+        }
+
+
+        // =====================================
+        // FORMAT RUPIAH
+        // =====================================
+
+        function formatRupiah(
+            angka
+        ) {
+
+            return new Intl.NumberFormat(
+                "id-ID",
+                {
+                    style: "currency",
+                    currency: "IDR",
+                    maximumFractionDigits: 0
+                }
+            ).format(angka);
+
+        }
+
+
+        // =====================================
+        // CARI PRODUK
+        // =====================================
+
+        function cariProduk() {
+
+            const keyword =
+                document.getElementById(
+                    "searchInput"
+                ).value.toLowerCase();
+
+
+            const hasil =
+                semuaProduk.filter(function(item) {
+
+                    return (
+                        item.nama
+                            .toLowerCase()
+                            .includes(keyword)
+                        ||
+                        item.kategori
+                            .toLowerCase()
+                            .includes(keyword)
+                    );
+
+                });
+
+
+            tampilkanProduk(hasil);
+
+        }
+
+
+        // =====================================
+        // BUKA TAMBAH
+        // =====================================
+
+        function bukaTambah() {
+
+            editId = null;
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Tambah Produk";
+
+
+            document.getElementById(
+                "nama"
+            ).value = "";
+
+            document.getElementById(
+                "kategori"
+            ).value = "";
+
+            document.getElementById(
+                "harga"
+            ).value = "";
+
+            document.getElementById(
+                "stok"
+            ).value = "";
+
+            document.getElementById(
+                "gambar"
+            ).value = "";
+
+
+            document.getElementById(
+                "modal"
+            ).style.display = "flex";
+
+        }
+
+
+        // =====================================
+        // BUKA EDIT
+        // =====================================
+
+        function bukaEdit(
+            id
+        ) {
+
+            const produk =
+                semuaProduk.find(
+                    function(item) {
+                        return item.id === id;
+                    }
+                );
+
+
+            if (!produk) {
+
+                alert(
+                    "Produk tidak ditemukan."
+                );
+
+                return;
+
+            }
+
+
+            editId = id;
+
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Edit Produk";
+
+
+            document.getElementById(
+                "nama"
+            ).value =
+                produk.nama || "";
+
+
+            document.getElementById(
+                "kategori"
+            ).value =
+                produk.kategori || "";
+
+
+            document.getElementById(
+                "harga"
+            ).value =
+                produk.harga || "";
+
+
+            document.getElementById(
+                "stok"
+            ).value =
+                produk.stok || "";
+
+
+            document.getElementById(
+                "gambar"
+            ).value =
+                produk.gambar || "";
+
+
+            document.getElementById(
+                "modal"
+            ).style.display = "flex";
+
+        }
+
+
+        // =====================================
+        // TUTUP MODAL
+        // =====================================
+
+        function tutupModal() {
+
+            document.getElementById(
+                "modal"
+            ).style.display = "none";
+
+        }
+
+
+        // =====================================
+        // SIMPAN PRODUK
+        // =====================================
+
+        async function simpanProduk() {
+
+            const nama =
+                document.getElementById(
+                    "nama"
+                ).value.trim();
+
+
+            const kategori =
+                document.getElementById(
+                    "kategori"
+                ).value.trim();
+
+
+            const harga =
+                document.getElementById(
+                    "harga"
+                ).value;
+
+
+            const stok =
+                document.getElementById(
+                    "stok"
+                ).value;
+
+
+            const gambar =
+                document.getElementById(
+                    "gambar"
+                ).value.trim();
+
+
+            // VALIDASI
+
+            if (!nama) {
+
+                alert(
+                    "Nama produk harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            if (!kategori) {
+
+                alert(
+                    "Kategori harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            if (!harga) {
+
+                alert(
+                    "Harga harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            if (stok === "") {
+
+                alert(
+                    "Stok harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                // =================================
+                // EDIT
+                // =================================
+
+                if (editId !== null) {
+
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("produk")
+                        .update({
+
+                            nama: nama,
+
+                            kategori: kategori,
+
+                            harga: Number(harga),
+
+                            stok: Number(stok),
+
+                            gambar: gambar || null
+
+                        })
+                        .eq(
+                            "id",
+                            editId
+                        );
+
+
+                    if (error) {
+
+                        throw error;
+
+                    }
+
+
+                    alert(
+                        "Produk berhasil diperbarui!"
+                    );
+
+                }
+
+
+                // =================================
+                // TAMBAH
+                // =================================
+
+                else {
+
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from("produk")
+                        .insert([{
+
+                            nama: nama,
+
+                            kategori: kategori,
+
+                            harga: Number(harga),
+
+                            stok: Number(stok),
+
+                            gambar: gambar || null
+
+                        }]);
+
+
+                    if (error) {
+
+                        throw error;
+
+                    }
+
+
+                    alert(
+                        "Produk berhasil ditambahkan!"
+                    );
+
+                }
+
+
+                tutupModal();
+
+                ambilProduk();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Gagal menyimpan produk: "
+                    + error.message
+                );
+
+            }
+
+        }
+
+
+        // =====================================
+        // HAPUS PRODUK
+        // =====================================
+
+        async function hapusProduk(
+            id
+        ) {
+
+            const yakin =
+                confirm(
+                    "Apakah kamu yakin ingin menghapus produk ini?"
+                );
+
+
+            if (!yakin) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const {
+                    error
+                } = await supabaseClient
+                    .from("produk")
+                    .delete()
+                    .eq(
+                        "id",
+                        id
+                    );
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                alert(
+                    "Produk berhasil dihapus!"
+                );
+
+
+                ambilProduk();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Gagal menghapus produk: "
+                    + error.message
+                );
+
+            }
+
+        }
+
+
+        // =====================================
+        // KONTAK
+        // =====================================
+
         function kirimPesan() {
+
+            const nama =
+                document.getElementById(
+                    "namaKontak"
+                ).value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "emailKontak"
+                ).value.trim();
+
+
+            const pesan =
+                document.getElementById(
+                    "pesanKontak"
+                ).value.trim();
+
+
+            if (!nama) {
+
+                alert(
+                    "Nama harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            if (!email) {
+
+                alert(
+                    "Email harus diisi."
+                );
+
+                return;
+
+            }
+
+
+            if (!pesan) {
+
+                alert(
+                    "Pesan harus diisi."
+                );
+
+                return;
+
+            }
+
+
             alert(
                 "Pesan berhasil dikirim!"
             );
+
+
+            document.getElementById(
+                "namaKontak"
+            ).value = "";
+
+
+            document.getElementById(
+                "emailKontak"
+            ).value = "";
+
+
+            document.getElementById(
+                "pesanKontak"
+            ).value = "";
+
         }
+
+
+        // =====================================
+        // KLIK DI LUAR MODAL
+        // =====================================
+
+        window.onclick =
+            function(event) {
+
+                const modal =
+                    document.getElementById(
+                        "modal"
+                    );
+
+
+                if (event.target === modal) {
+
+                    tutupModal();
+
+                }
+
+            };
 
     </script>
 

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShoeStore - Toko Sepatu</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        /* NAVBAR */
+        nav {
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #198754;
+        }
+
+        .logo span {
+            color: #222;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .menu a:hover {
+            color: #198754;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 500px;
+            padding: 70px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            background: linear-gradient(135deg, #e8f5ee, #f5f6f8);
+        }
+
+        .hero-text {
+            max-width: 550px;
+        }
+
+        .hero-text h1 {
+            font-size: 50px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 span {
+            color: #198754;
+        }
+
+        .hero-text p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 25px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #146c43;
+        }
+
+        .hero-shoe {
+            width: 400px;
+            height: 300px;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 130px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        /* SECTION */
+        section {
+            padding: 70px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #777;
+        }
+
+        /* PRODUCTS */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        }
+
+        .product-image {
+            height: 190px;
+            background: #eef1f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            margin-bottom: 8px;
+        }
+
+        .category {
+            color: #198754;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            border: none;
+            padding: 11px;
+            background: #198754;
+            color: white;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .buy-btn:hover {
+            background: #146c43;
+        }
+
+        /* ABOUT */
+        .about {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            background: white;
+        }
+
+        .about-image {
+            flex: 1;
+            min-height: 300px;
+            background: #e8f5ee;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 100px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text h2 {
+            font-size: 34px;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        /* CONTACT */
+        .contact-box {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        }
+
+        .contact-box input,
+        .contact-box textarea {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        .contact-box textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .contact-box button {
+            border: none;
+            cursor: pointer;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1f2933;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            color: #bbb;
+            margin-top: 8px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-shoe {
+                width: 100%;
+            }
+
+            .about {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 15px 5%;
+            }
+
+            .menu {
+                gap: 12px;
+            }
+
+            .menu a {
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 5%;
+            }
+
+            .hero-text h1 {
+                font-size: 36px;
+            }
+
+            section {
+                padding: 50px 5%;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-shoe {
+                height: 220px;
+                font-size: 90px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            👟 Shoe<span>Store</span>
+        </div>
+
+        <ul class="menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#produk">Produk</a></li>
+            <li><a href="#tentang">Tentang</a></li>
+            <li><a href="#kontak">Kontak</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+
+        <div class="hero-text">
+            <h1>
+                Temukan Sepatu
+                <span>Favoritmu</span>
+            </h1>
+
+            <p>
+                Koleksi sepatu berkualitas dengan desain modern,
+                nyaman digunakan, dan cocok untuk berbagai aktivitas.
+            </p>
+
+            <a href="#produk" class="btn">
+                Lihat Produk
+            </a>
+        </div>
+
+        <div class="hero-shoe">
+            👟
+        </div>
+
+    </section>
+
+
+    <!-- PRODUK -->
+    <section id="produk">
+
+        <div class="section-title">
+            <h2>Produk Terbaru</h2>
+            <p>Pilih sepatu yang sesuai dengan gaya kamu</p>
+        </div>
+
+        <div class="products">
+
+            <!-- PRODUK 1 -->
+            <div class="card">
+                <div class="product-image">
+                    👟
+                </div>
+
+                <div class="card-content">
+                    <div class="category">
+                        Sneakers
+                    </div>
+
+                    <h3>Urban Sneakers</h3>
+
+                    <div class="price">
+                        Rp 350.000
+                    </div>
+
+                    <button class="buy-btn"
+                        onclick="beli('Urban Sneakers')">
+                        Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- PRODUK 2 -->
+            <div class="card">
+                <div class="product-image">
+                    👞
+                </div>
+
+                <div class="card-content">
+                    <div class="category">
+                        Formal
+                    </div>
+
+                    <h3>Classic Shoes</h3>
+
+                    <div class="price">
+                        Rp 450.000
+                    </div>
+
+                    <button class="buy-btn"
+                        onclick="beli('Classic Shoes')">
+                        Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- PRODUK 3 -->
+            <div class="card">
+                <div class="product-image">
+                    🥾
+                </div>
+
+                <div class="card-content">
+                    <div class="category">
+                        Outdoor
+                    </div>
+
+                    <h3>Mountain Boots</h3>
+
+                    <div class="price">
+                        Rp 550.000
+                    </div>
+
+                    <button class="buy-btn"
+                        onclick="beli('Mountain Boots')">
+                        Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- PRODUK 4 -->
+            <div class="card">
+                <div class="product-image">
+                    👟
+                </div>
+
+                <div class="card-content">
+                    <div class="category">
+                        Running
+                    </div>
+
+                    <h3>Sport Runner</h3>
+
+                    <div class="price">
+                        Rp 400.000
+                    </div>
+
+                    <button class="buy-btn"
+                        onclick="beli('Sport Runner')">
+                        Beli Sekarang
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TENTANG -->
+    <section class="about" id="tentang">
+
+        <div class="about-image">
+            👟
+        </div>
+
+        <div class="about-text">
+
+            <h2>Tentang ShoeStore</h2>
+
+            <p>
+                ShoeStore adalah toko sepatu yang menyediakan
+                berbagai pilihan sepatu untuk kebutuhan sehari-hari,
+                olahraga, maupun acara formal.
+            </p>
+
+            <p>
+                Kami mengutamakan kualitas produk, kenyamanan,
+                dan harga yang terjangkau bagi pelanggan.
+            </p>
+
+            <a href="#kontak" class="btn">
+                Hubungi Kami
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- KONTAK -->
+    <section id="kontak">
+
+        <div class="section-title">
+            <h2>Hubungi Kami</h2>
+            <p>Silakan kirim pesan kepada kami</p>
+        </div>
+
+        <div class="contact-box">
+
+            <input
+                type="text"
+                placeholder="Nama">
+
+            <input
+                type="email"
+                placeholder="Email">
+
+            <textarea
+                placeholder="Pesan"></textarea>
+
+            <button
+                class="btn"
+                onclick="kirimPesan()">
+                Kirim Pesan
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <h3>👟 ShoeStore</h3>
+
+        <p>
+            Toko Sepatu Modern & Berkualitas
+        </p>
+
+        <p>
+            © 2026 ShoeStore. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        function beli(namaProduk) {
+            alert(
+                "Kamu memilih produk: " + namaProduk
+            );
+        }
+
+        function kirimPesan() {
+            alert(
+                "Pesan berhasil dikirim!"
+            );
+        }
+
+    </script>
+
+</body>
+</html>
